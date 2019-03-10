@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "name" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: {{ template "name" . }}
+        image: {{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        resources:
+{{ toYaml .Values.deployment.resources | indent 12 }}
+        ports:
+        - containerPort: {{ .Values.deployment.port }}

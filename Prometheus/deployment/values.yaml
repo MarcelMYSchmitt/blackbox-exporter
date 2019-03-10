@@ -1,0 +1,26 @@
+revisionHistoryLimit: 0
+
+image:
+  registry: 'registryname'.azurecr.io
+  name: prometheus
+  version: latest
+  imagePullPolicy: Always
+
+deployment:
+  replicas: 1
+  port: 9090
+  annotations:
+    prometheus.io/port: "9090"
+    prometheus.io/scrape: "true"
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1
+
+# ingress can be enabled for debugging
+ingress:
+  enabled: true
+  host: 'url of prometheus'
